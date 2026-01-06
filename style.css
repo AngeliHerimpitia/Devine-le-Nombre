@@ -16,10 +16,7 @@ body.light {
   --primary: #4b73ff;
 }
 
-* {
-  box-sizing: border-box;
-  transition: all 0.3s;
-}
+* { box-sizing: border-box; transition: all 0.3s; }
 
 body {
   margin: 0;
@@ -30,6 +27,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .game-container {
@@ -41,15 +39,12 @@ body {
   text-align: center;
   box-shadow: 0 10px 30px rgba(0,0,0,.4);
   animation: fadeIn 0.7s ease;
+  position: relative;
 }
 
 h1 { margin-bottom: 15px; }
 
-.top-controls {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
-}
+.top-controls { display: flex; justify-content: space-between; margin-bottom: 15px; }
 
 button {
   background: var(--primary);
@@ -74,42 +69,17 @@ input, select {
 
 .hidden { display: none; }
 
-#message.correct {
-  animation: glow 0.5s ease;
-  color: var(--glow-correct);
-}
+#message.correct { animation: glow 0.5s ease; color: var(--glow-correct); }
+#message.wrong { animation: shake 0.5s ease; color: var(--shake-wrong); }
 
-#message.wrong {
-  animation: shake 0.5s ease;
-  color: var(--shake-wrong);
-}
-
-#leaderboard, #history2P {
-  text-align: left;
-  margin-top: 15px;
-}
-
+#leaderboard, #history2P { text-align: left; margin-top: 15px; }
 #leaderboard ul, #history2P ul { list-style: none; padding-left: 10px; }
 #leaderboard li, #history2P li { margin: 3px 0; }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+#confettiCanvas { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999; }
 
-@keyframes glow {
-  0% { text-shadow: 0 0 0px var(--glow-correct);}
-  50% { text-shadow: 0 0 10px var(--glow-correct);}
-  100% { text-shadow: 0 0 0px var(--glow-correct);}
-}
+@keyframes fadeIn { from { opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
+@keyframes glow { 0% { text-shadow:0 0 0px var(--glow-correct);} 50%{text-shadow:0 0 10px var(--glow-correct);} 100%{text-shadow:0 0 0px var(--glow-correct);} }
+@keyframes shake {0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}50%{transform:translateX(5px);}75%{transform:translateX(-5px);}}
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  50% { transform: translateX(5px); }
-  75% { transform: translateX(-5px); }
-}
-
-@media (max-width: 500px) {
-  .game-container { padding: 15px; }
-}
+@media (max-width:500px){ .game-container{padding:15px;} }
