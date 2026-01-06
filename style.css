@@ -1,1 +1,88 @@
+:root {
+  --bg: #0f0f14;
+  --card: #181820;
+  --text: #e9e9e9;
+  --primary: #4b73ff;
+  --success: #28a745;
+  --danger: #dc3545;
+}
+
+body.light {
+  --bg: #f4f4f4;
+  --card: #ffffff;
+  --text: #111;
+  --primary: #4b73ff;
+  --success: #28a745;
+  --danger: #dc3545;
+}
+
+* {
+  box-sizing: border-box;
+  transition: all 0.3s;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.game-container {
+  background: var(--card);
+  padding: 25px;
+  border-radius: 14px;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
+  animation: fadeIn 0.7s ease;
+}
+
+h1 { margin-bottom: 15px; }
+
+.top-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+button {
+  background: var(--primary);
+  border: none;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover { opacity: 0.9; transform: translateY(-2px); }
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  margin: 10px 0;
+}
+
+.hidden { display: none; }
+
+#leaderboard { text-align: left; margin-top: 15px; }
+#leaderboard ul { list-style: none; padding-left: 10px; }
+#leaderboard li { margin: 3px 0; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 500px) {
+  .game-container { padding: 15px; }
+}
 
