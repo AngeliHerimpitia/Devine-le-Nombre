@@ -7,7 +7,9 @@ let maxAttempts = 7;
 let timer = 0;
 let interval = null;
 let bestScores = JSON.parse(localStorage.getItem("bestScores")) || {};
+let history2P = JSON.parse(localStorage.getItem("history2P")) || [];
 let playerName = "";
+let soundOn = true;
 
 /* ===== ELEMENTS ===== */
 const input = document.getElementById("numberInput");
@@ -18,16 +20,29 @@ const phaseText = document.getElementById("phaseText");
 const resetBtn = document.getElementById("resetBtn");
 const modeBtn = document.getElementById("modeToggle");
 const themeBtn = document.getElementById("themeToggle");
+const soundBtn = document.getElementById("soundToggle");
 const levelSelect = document.getElementById("difficulty");
 const bestScoreEl = document.getElementById("bestScore");
 const levelBox = document.getElementById("levelBox");
 const leaderboardEl = document.getElementById("topScores");
 const playerInput = document.getElementById("playerName");
+const historyList = document.getElementById("historyList");
+
+/* ===== SONS ===== */
+const audioClick = new Audio("https://freesound.org/data/previews/522/522220_915571-lq.mp3");
+const audioWin = new Audio("https://freesound.org/data/previews/320/320181_5260876-lq.mp3");
+const audioLose = new Audio("https://freesound.org/data/previews/411/411635_512123-lq.mp3");
 
 /* ===== THEME ===== */
 themeBtn.onclick = () => {
   document.body.classList.toggle("light");
   themeBtn.textContent = document.body.classList.contains("light") ? "☀️ Mode Clair" : "🌙 Mode Sombre";
+};
+
+/* ===== SOUND ===== */
+soundBtn.onclick = () => {
+  soundOn = !soundOn;
+  soundBtn.textContent = soundOn ? "🔊 Sons ON" : "🔇 Sons OFF";
 };
 
 /* ===== MODE ===== */
@@ -46,6 +61,7 @@ levelSelect.onchange = () => {
 
 /* ===== VALIDER ===== */
 validateBtn.onclick = () => {
+  if(soundOn) audioClick.play();
   playerName = playerInput.value.trim() || "Joueur";
   const value = Number(input.value);
   if (!value) return;
@@ -72,19 +88,21 @@ function soloGame(value) {
   tries++;
   triesText.textContent = `Essais : ${tries}/${maxAttempts}`;
 
-  if (value < secretNumber) message.textContent = "🔽 Trop petit";
-  else if (value > secretNumber) message.textContent = "🔼 Trop grand";
+  if (value < secretNumber) showMsg("🔽 Trop petit","wrong");
+  else if (value > secretNumber) showMsg("🔼 Trop grand","wrong");
   else {
-    message.textContent = `🎉 Bravo ${playerName}! Trouvé en ${tries} essais`;
+    showMsg(`🎉 Bravo ${playerName}! Trouvé en ${tries} essais`,"correct");
     stopTimer();
+    if(soundOn) audioWin.play();
     saveScore();
     resetBtn.classList.remove("hidden");
     return;
   }
 
-  if (tries >= maxAttempts) {
+  if (tries >= maxAttempts && value !== secretNumber) {
     stopTimer();
-    message.textContent = `❌ Perdu ! Le nombre était ${secretNumber}`;
+    showMsg(`❌ Perdu ! Le nombre était ${secretNumber}`,"wrong");
+    if(soundOn) audioLose.play();
     resetBtn.classList.remove("hidden");
   }
 }
@@ -100,16 +118,24 @@ function duoGame(value) {
   } else {
     tries++;
     triesText.textContent = `Essais : ${tries}`;
-    if (value < secretNumber) message.textContent = "🔽 Trop petit";
-    else if (value > secretNumber) message.textContent = "🔼 Trop grand";
+    if (value < secretNumber) showMsg("🔽 Trop petit","wrong");
+    else if (value > secretNumber) showMsg("🔼 Trop grand","wrong");
     else {
-      message.textContent = `🏆 Joueur 2 gagne en ${tries} essais`;
+      showMsg(`🏆 Joueur 2 gagne en ${tries} essais`,"correct");
+      if(soundOn) audioWin.play();
+      addHistory2P(playerName, tries, secretNumber);
       resetBtn.classList.remove("hidden");
     }
   }
 }
 
-/* ===== SCORE ===== */
+/* ===== MESSAGE ===== */
+function showMsg(msg,type){
+  message.textContent = msg;
+  message.className = type;
+}
+
+/* ===== SCORE SOLO ===== */
 function saveScore() {
   const score = (maxAttempts - tries + 1) * 100 - timer * 2;
   const key = `topScores-${max}`;
@@ -133,6 +159,23 @@ function loadLeaderboard() {
   });
 }
 
+/* ===== HISTORIQUE 2 JOUEURS ===== */
+function addHistory2P(name, tries, secret){
+  history2P.unshift({name, tries, secret});
+  if(history2P.length>10) history2P.pop();
+  localStorage.setItem("history2P",JSON.stringify(history2P));
+  renderHistory2P();
+}
+
+function renderHistory2P(){
+  historyList.innerHTML = "";
+  history2P.forEach(h=>{
+    const li = document.createElement("li");
+    li.textContent = `${h.name} a trouvé ${h.secret} en ${h.tries} essais`;
+    historyList.appendChild(li);
+  });
+}
+
 /* ===== RESET ===== */
 resetBtn.onclick = resetGame;
 
@@ -144,7 +187,7 @@ function resetGame() {
   message.textContent = "";
   resetBtn.classList.add("hidden");
 
-  if (mode === "solo") {
+  if(mode === "solo"){
     levelBox.style.display = "block";
     input.type = "number";
     secretNumber = Math.floor(Math.random() * max) + 1;
@@ -160,8 +203,9 @@ function resetGame() {
     bestScoreEl.textContent = "—";
     leaderboardEl.innerHTML = "";
   }
+
+  renderHistory2P();
 }
 
 /* ===== INIT ===== */
 resetGame();
-
