@@ -1,1 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎯 Devine le Nombre PRO</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="game-container">
+  <h1>🎯 Devine le Nombre</h1>
+
+  <div class="top-controls">
+    <button id="modeToggle">👤 1 Joueur</button>
+    <button id="themeToggle">🌙 Mode Sombre</button>
+  </div>
+
+  <!-- Niveau (1 joueur) -->
+  <div id="levelBox">
+    <label>Niveau :</label>
+    <select id="difficulty">
+      <option value="50">Facile (1–50)</option>
+      <option value="100" selected>Moyen (1–100)</option>
+      <option value="500">Difficile (1–500)</option>
+    </select>
+  </div>
+
+  <div class="player-name">
+    <label>Pseudo :</label>
+    <input type="text" id="playerName" placeholder="Ton pseudo">
+  </div>
+
+  <p id="phaseText"></p>
+
+  <input type="number" id="numberInput" placeholder="Entre un nombre">
+  <button id="validateBtn">Valider</button>
+
+  <p id="message"></p>
+  <p id="triesText">Essais : 0</p>
+  <p>⏱ Timer : <span id="timer">0s</span></p>
+  <p>⭐ Meilleur score : <span id="bestScore">—</span></p>
+
+  <div id="leaderboard">
+    <h3>🏆 Top 5 Scores</h3>
+    <ul id="topScores"></ul>
+  </div>
+
+  <button id="resetBtn" class="hidden">🔁 Rejouer</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
 
