@@ -5,6 +5,8 @@
   --primary: #4b73ff;
   --success: #28a745;
   --danger: #dc3545;
+  --glow-correct: #28a745;
+  --shake-wrong: #dc3545;
 }
 
 body.light {
@@ -12,8 +14,6 @@ body.light {
   --card: #ffffff;
   --text: #111;
   --primary: #4b73ff;
-  --success: #28a745;
-  --danger: #dc3545;
 }
 
 * {
@@ -69,20 +69,47 @@ input, select {
   border-radius: 8px;
   border: none;
   margin: 10px 0;
+  text-align: center;
 }
 
 .hidden { display: none; }
 
-#leaderboard { text-align: left; margin-top: 15px; }
-#leaderboard ul { list-style: none; padding-left: 10px; }
-#leaderboard li { margin: 3px 0; }
+#message.correct {
+  animation: glow 0.5s ease;
+  color: var(--glow-correct);
+}
+
+#message.wrong {
+  animation: shake 0.5s ease;
+  color: var(--shake-wrong);
+}
+
+#leaderboard, #history2P {
+  text-align: left;
+  margin-top: 15px;
+}
+
+#leaderboard ul, #history2P ul { list-style: none; padding-left: 10px; }
+#leaderboard li, #history2P li { margin: 3px 0; }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes glow {
+  0% { text-shadow: 0 0 0px var(--glow-correct);}
+  50% { text-shadow: 0 0 10px var(--glow-correct);}
+  100% { text-shadow: 0 0 0px var(--glow-correct);}
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+}
+
 @media (max-width: 500px) {
   .game-container { padding: 15px; }
 }
-
