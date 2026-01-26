@@ -1,7 +1,6 @@
 // --- Variables ---
 let mode = "solo", phase = "guess", secretNumber = 0, tries = 0, max = 100, maxAttempts = 7;
 let timer = 0, interval = null;
-let bestScores = JSON.parse(localStorage.getItem("bestScores")) || {};
 let history2P = JSON.parse(localStorage.getItem("history2P")) || [];
 let playerName = "";
 
@@ -230,3 +229,9 @@ function resetGame() {
 
 // --- INIT ---
 resetGame();
+// --- Permettre l'envoi avec la touche Entrée ---
+input.addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    validateBtn.click();
+  }
+});
